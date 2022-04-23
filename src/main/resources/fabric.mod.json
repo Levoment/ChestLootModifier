@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "chestlootmodifier",
+  "version": "${version}",
+
+  "name": "Chest Loot Modifier",
+  "description": "Customize chests loot",
+  "authors": [
+    "Levoment"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+
+  "license": "The Unlicense",
+  "icon": "assets/chestlootmodifier/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.github.levoment.chestlootmodifier.ChestLootModifierMod"
+    ]
+  },
+  "mixins": [
+    "modid.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
