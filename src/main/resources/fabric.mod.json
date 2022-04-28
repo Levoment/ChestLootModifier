@@ -23,7 +23,7 @@
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "chestlootmodifier.mixins.json"
   ],
 
   "depends": {
