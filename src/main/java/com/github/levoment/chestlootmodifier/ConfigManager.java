@@ -25,28 +25,39 @@ public class ConfigManager {
             try {
                 // Config file string
                 String configFileText = "{\n" +
+                        "\n" +
+                        "  \"Names\": {\n" +
+                        "    \"Common\": {\n" +
+                        "      \"MinRolls\": 1,\n" +
+                        "      \"MaxRolls\": 2\n" +
+                        "    },\n" +
+                        "    \"Uncommon\": {\n" +
+                        "      \"MinRolls\": 1,\n" +
+                        "      \"MaxRolls\": 2\n" +
+                        "    },\n" +
+                        "    \"Rare\": {\n" +
+                        "      \"MinRolls\": 1,\n" +
+                        "      \"MaxRolls\": 3\n" +
+                        "    },\n" +
+                        "    \"SuperRare\": {\n" +
+                        "      \"MinRolls\": 2,\n" +
+                        "      \"MaxRolls\": 4\n" +
+                        "    }\n" +
+                        "  },\n" +
                         "  \n" +
-                        "  \"Names\": [\n" +
-                        "    \"Common\",\n" +
-                        "    \"Uncommon\",\n" +
-                        "    \"Rare\",\n" +
-                        "    \"SuperRare\"\n" +
-                        "  ],\n" +
-                        "  \n" +
-                        "  \"Chest Definitions\": {\n" +
+                        "  \"ChestDefinitions\": {\n" +
                         "    \"Common\": [],\n" +
                         "    \"Uncommon\": [],\n" +
                         "    \"Rare\": [],\n" +
                         "    \"SuperRare\": []\n" +
                         "  },\n" +
                         "\n" +
-                        "  \"Loot Definitions\": {\n" +
+                        "  \"LootDefinitions\": {\n" +
                         "    \"Common\": [],\n" +
                         "    \"Uncommon\": [],\n" +
                         "    \"Rare\": [],\n" +
                         "    \"SuperRare\": []\n" +
                         "  }\n" +
-                        "  \n" +
                         "}";
                 // Create the file writer to write the file
                 FileWriter configFileWritter = new FileWriter(configFile);
@@ -95,6 +106,5 @@ public class ConfigManager {
                 System.exit(-1);
             }
         } else ChestLootModifierMod.LOGGER.error("No configuration file found for Chest Loot Modifier Mod in: " + configFile.getPath());
-
     }
 }

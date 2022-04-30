@@ -6,9 +6,11 @@
 
 Minecraft mod for modifying the items that appear in chests in Minecraft
 
-In this mod, the game needs to be restarted for the changes in the configuration to 
-take effect and the changes will apply only to chests that have not been generated yet
-in the world.
+Everytime a chest is generated in the world, it is not until the chest is opened for the 
+first time that loot for it is generated. Therefore, this mod does not require the game to be 
+restarted for the changes in the config file to take effect. However, once a chest 
+is opened for the first time, the loot generated for said chest will not change unless there is a mod 
+that regenerates the loot for the chest.
 
 ## Configuration
 
@@ -21,14 +23,26 @@ A sample file looks like this:
 
 ```json
 {
-  
-  "Names": [
-    "Common",
-    "Uncommon",
-    "Rare",
-    "SuperRare"
-  ],
-  
+
+  "Names": {
+    "Common": {
+      "MinRolls": 1,
+      "MaxRolls": 2
+    },
+    "Uncommon": {
+      "MinRolls": 1,
+      "MaxRolls": 2
+    },
+    "Rare": {
+      "MinRolls": 1,
+      "MaxRolls": 3
+    },
+    "SuperRare": {
+      "MinRolls": 2,
+      "MaxRolls": 4
+    }
+  },
+
   "ChestDefinitions": {
     "Common": ["minecraft:chests/spawn_bonus_chest", "minecraft:chests/village/village_mason", "minecraft:chests/simple_dungeon"],
     "Uncommon": ["minecraft:chests/desert_pyramid", "minecraft:chests/pillager_outpost", "minecraft:chests/ruined_portal"],
@@ -37,17 +51,20 @@ A sample file looks like this:
   },
 
   "LootDefinitions": {
-    "Common": ["minecraft:golden_sword(100)(3)", "minecraft:golden_pickaxe(100)(12)", "minecraft:coal_ore(100)(16)"],
-    "Uncommon": ["minecraft:diamond(70)(4)", "minecraft:diamond(90)(2)", "minecraft:diamond_sword(85)(1)"],
-    "Rare": ["minecraft:netherite_axe(80)(1)", "minecraft:netherite_ingot(95)(8)"],
-    "SuperRare": ["minecraft:elytra(99)(1)", "minecraft:shulker_box(90)(2)"]
+    "Common": ["minecraft:golden_sword(1)(1)", "minecraft:golden_pickaxe(1)(1)", "minecraft:diamond(16)(3)"],
+    "Uncommon": ["minecraft:diamond(8)(4)", "minecraft:diamond_sword(1)(1)"],
+    "Rare": ["minecraft:netherite_axe(1)(3)", "minecraft:netherite_ingot(8)(1)"],
+    "SuperRare": ["minecraft:elytra(1)(2)", "minecraft:shulker_box(2)(5)"]
   }
-  
 }
 ```
 
 `Names` are the names used to identify the kind of loot. This can be anything, but whatever 
 they are, they must be the same on `ChestDefinitions` and `LootDefinitions`.
+- `MinRolls` and `MaxRolls` are the number of rolls to do for that rarity pool. Choosing 
+a minimum of `0` will give it a chance that none of the items in that pool will appear. 
+These numbers are integers. Because it is a range between min and max, the rolls for the 
+pool will be a random number between the range.
 
 `ChestDefinitions` these are the chests that will apply to a loot. For instance, which 
 chests will get Common, Uncommon, Rare, and SuperRare loot. These must be the fully 
@@ -57,14 +74,12 @@ qualified Minecraft Identifiers for the chests.
 which items will apply to Common loot, Uncommon loot, etc. 
 
 - **The number in the first 
-parenthesis** is the number that will indicate the percentage chance of the item appearing 
-in the chest. To make it always appear, set it to 100. Note that if the game fills the 
-chest with other items, even a 100 number could make the item not appear in the chest. 
+parenthesis** is the number that will indicate the number of items to appear if the item 
+is selected to appear on the chest that the rarity applies to. 
 
-- **The number in the second parenthesis** is the number range of items that the game should 
-put on the chest. The game will not always put the specified number. It will put anything 
-within that range. The game could put 0 of the item, the number specified, or a number in 
-between.
+- **The number in the second parenthesis** is the weight for the item. The higher the 
+weight, the higher the chances that such item will appear should the pool be selected for 
+the chest.
 
 ## Issues
 The mod has a lot of logic to print to the console when something fails. If the game crashes 

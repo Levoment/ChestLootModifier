@@ -5,22 +5,22 @@ import java.util.Map;
 
 public class ConfigurationObject {
 
-    public List<String> Names;
+    public Map<String, RarityObject> Names;
     public Map<String, List<String>> ChestDefinitions;
     public Map<String, List<String>> LootDefinitions;
 
-    public ConfigurationObject(List<String> names, Map<String, List<String>> chestDefinitions, Map<String, List<String>> lootDefinitions) {
+    public ConfigurationObject(Map<String, RarityObject> names, Map<String, List<String>> chestDefinitions, Map<String, List<String>> lootDefinitions) {
         this.Names = names;
         this.ChestDefinitions = chestDefinitions;
         this.LootDefinitions = lootDefinitions;
     }
 
-    public List<String> getNames() {
+    public Map<String, RarityObject> getNames() {
         return Names;
     }
 
-    public void setNames(List<String> names) {
-        Names = names;
+    public void setNames(Map<String, RarityObject> names) {
+       this.Names = names;
     }
 
     public Map<String, List<String>> getChestDefinitions() {
