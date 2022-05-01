@@ -35,13 +35,14 @@ import java.util.regex.Pattern;
 public class LootableContainerBlockEntityMixin {
 
     private LootTable chestLootModifierModModifiedLootTable;
+    private boolean addPool;
 
     @Shadow
     Identifier lootTableId;
 
     @Inject(method = "checkLootInteraction(Lnet/minecraft/entity/player/PlayerEntity;)V", at = @At("HEAD"))
     public void checkLootInteractionMixinCallback(PlayerEntity player, CallbackInfo ci) {
-
+        this.addPool = false;
         if (this.lootTableId != null && ((LootableContainerBlockEntity) ((Object) this)).getWorld().getServer() != null) {
             MinecraftServer minecraftServer = ((LootableContainerBlockEntity) ((Object) this)).getWorld().getServer();
             // Regex to match everything before a parenthesis
@@ -137,6 +138,7 @@ public class LootableContainerBlockEntityMixin {
                                 LootManager lootManager = minecraftServer.getLootManager();
                                 LootTable lootTable = lootManager.getTable(this.lootTableId);
                                 this.chestLootModifierModModifiedLootTable = FabricLootSupplierBuilder.of(lootTable).withPool(currentLootPool).build();
+                                this.addPool = true;
                             } else {
                                 ChestLootModifierMod.LOGGER.error("[Chest Loot Modifier Mod] There is no loot defined for " + key + " in the config file LootDefinition object");
                             }
@@ -152,6 +154,10 @@ public class LootableContainerBlockEntityMixin {
 
     @ModifyVariable(method = "checkLootInteraction(Lnet/minecraft/entity/player/PlayerEntity;)V", at = @At(value = "STORE", id = "lootTable"))
     public LootTable modifyLootTable(LootTable lootTable) {
-        return this.chestLootModifierModModifiedLootTable;
+        if (this.addPool) {
+            return this.chestLootModifierModModifiedLootTable;
+        } else {
+            return lootTable;
+        }
     }
 }
