@@ -5,14 +5,24 @@ import java.util.Map;
 
 public class ConfigurationObject {
 
+    public boolean LoadPoolsAtRuntime;
     public Map<String, RarityObject> Names;
     public Map<String, List<String>> ChestDefinitions;
     public Map<String, List<String>> LootDefinitions;
 
-    public ConfigurationObject(Map<String, RarityObject> names, Map<String, List<String>> chestDefinitions, Map<String, List<String>> lootDefinitions) {
+    public ConfigurationObject(boolean loadPoolsAtRuntime, Map<String, RarityObject> names, Map<String, List<String>> chestDefinitions, Map<String, List<String>> lootDefinitions) {
+        this.LoadPoolsAtRuntime = loadPoolsAtRuntime;
         this.Names = names;
         this.ChestDefinitions = chestDefinitions;
         this.LootDefinitions = lootDefinitions;
+    }
+
+    public boolean loadPoolsAtRuntime() {
+        return LoadPoolsAtRuntime;
+    }
+
+    public void setLoadPoolsAtRuntime(boolean loadPoolsAtRuntime) {
+        LoadPoolsAtRuntime = loadPoolsAtRuntime;
     }
 
     public Map<String, RarityObject> getNames() {

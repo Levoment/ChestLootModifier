@@ -55,6 +55,9 @@ public class LootableContainerBlockEntityMixin {
 
             // If the configuration was loaded successfully
             if (ConfigManager.SUCCESSFULLY_LOADED_CONFIG) {
+                // Return if LoadPoolsAtRuntime is false
+                if (!ConfigManager.CURRENT_CONFIG.loadPoolsAtRuntime()) return;
+
                 ConfigManager.CURRENT_CONFIG.ChestDefinitions.forEach((key, chestIDs) -> {
                     // If the chest ID matches the current id being registered
                     if (chestIDs.contains(lootTableId.toString())) {
@@ -68,8 +71,6 @@ public class LootableContainerBlockEntityMixin {
                             if (rarityObjects.containsKey(key)) {
                                 rarityMinRolls = rarityObjects.get(key).getMinRolls();
                                 rarityMaxRolls = rarityObjects.get(key).getMaxRolls();
-
-
                             } else {
                                 ChestLootModifierMod.LOGGER.error("[Chest Loot Modifier Mod] The provided rarity named: '" + key + "' in LootDefinitions could not be found in 'Names' of the json config.");
                             }
@@ -154,6 +155,11 @@ public class LootableContainerBlockEntityMixin {
 
     @ModifyVariable(method = "checkLootInteraction(Lnet/minecraft/entity/player/PlayerEntity;)V", at = @At(value = "STORE", id = "lootTable"))
     public LootTable modifyLootTable(LootTable lootTable) {
+        // If the configuration was loaded successfully
+        if (ConfigManager.SUCCESSFULLY_LOADED_CONFIG) {
+            // Return if LoadPoolsAtRuntime is false
+            if (!ConfigManager.CURRENT_CONFIG.loadPoolsAtRuntime()) return lootTable;
+        }
         if (this.addPool) {
             return this.chestLootModifierModModifiedLootTable;
         } else {

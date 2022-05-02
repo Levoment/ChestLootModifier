@@ -23,7 +23,7 @@ A sample file looks like this:
 
 ```json
 {
-
+  "LoadPoolsAtRuntime": false,
   "Names": {
     "Common": {
       "MinRolls": 1,
@@ -58,6 +58,12 @@ A sample file looks like this:
   }
 }
 ```
+
+`LoadPoolsAtRuntime` - decides whether the pools are loaded when Loot Table Loading happens for 
+the world or whether to load them when a chest is opened for the first time. Default 
+value is `false` which means the pools are loaded when the world is loaded. 
+Being `false` might make the mod compatible with other mods. Making it 
+`true` might make the mod incompatible with other mods.
 
 `Names` are the names used to identify the kind of loot. This can be anything, but whatever 
 they are, they must be the same on `ChestDefinitions` and `LootDefinitions`.

@@ -25,7 +25,7 @@ public class ConfigManager {
             try {
                 // Config file string
                 String configFileText = "{\n" +
-                        "\n" +
+                        "  \"LoadPoolsAtRuntime\": false,\n" +
                         "  \"Names\": {\n" +
                         "    \"Common\": {\n" +
                         "      \"MinRolls\": 1,\n" +
@@ -44,7 +44,7 @@ public class ConfigManager {
                         "      \"MaxRolls\": 4\n" +
                         "    }\n" +
                         "  },\n" +
-                        "  \n" +
+                        "\n" +
                         "  \"ChestDefinitions\": {\n" +
                         "    \"Common\": [],\n" +
                         "    \"Uncommon\": [],\n" +
