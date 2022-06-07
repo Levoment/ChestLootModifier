@@ -1,11 +1,9 @@
 package com.github.levoment.chestlootmodifier;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
-import net.fabricmc.fabric.api.loot.v1.FabricLootSupplierBuilder;
-import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
+import net.fabricmc.fabric.api.loot.v2.FabricLootPoolBuilder;
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.item.Item;
-import net.minecraft.loot.LootManager;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.entry.ItemEntry;
@@ -38,9 +36,7 @@ public class ChestLootModifierMod implements ModInitializer {
         // Read the config file if it exists
         ConfigManager.readConfigFile();
 
-
-
-        LootTableLoadingCallback.EVENT.register((resourceManager, manager, id, supplier, setter) -> {
+        LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
             this.addPool = false;
             // Regex to match everything before a parenthesis
             Pattern beforeParenthesisPattern = Pattern.compile("^.*?(?=\\()", Pattern.CASE_INSENSITIVE);
@@ -79,7 +75,7 @@ public class ChestLootModifierMod implements ModInitializer {
                             List<String> lootList = ConfigManager.CURRENT_CONFIG.LootDefinitions.get(key);
                             // Check if the list is not empty
                             if (lootList.size() > 0) {
-                                LootPool currentLootPool = FabricLootPoolBuilder.builder().build();
+                                LootPool currentLootPool = LootPool.builder().build();
                                 // Go through all the loot definitions for this chest in the config file
                                 for (String itemID : lootList) {
 
@@ -115,9 +111,9 @@ public class ChestLootModifierMod implements ModInitializer {
                                                         try {
                                                             int itemWeight = Integer.parseInt(secondMatch);
                                                             // Create the pool builder
-                                                            currentLootPool = FabricLootPoolBuilder.of(currentLootPool).
-                                                                    withEntry(ItemEntry.builder(currentItem).weight(itemWeight).build())
-                                                                    .withFunction(SetCountLootFunction.builder(ConstantLootNumberProvider.create(itemCount)).build())
+                                                            currentLootPool = FabricLootPoolBuilder.copyOf(currentLootPool).
+                                                                    with(ItemEntry.builder(currentItem).weight(itemWeight).build())
+                                                                    .apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(itemCount)).build())
                                                                     .rolls(UniformLootNumberProvider.create(rarityMinRolls, rarityMaxRolls))
                                                                     .build();
                                                             addPool = true;
@@ -142,7 +138,7 @@ public class ChestLootModifierMod implements ModInitializer {
                                     }
                                 }
                                 // Add the item to the pool of items for the current chest
-                                if (this.addPool) supplier.withPool(currentLootPool).build();
+                                if (this.addPool) tableBuilder.pool(currentLootPool).build();
                             } else {
                                 ChestLootModifierMod.LOGGER.error("[Chest Loot Modifier Mod] There is no loot defined for " + key + " in the config file LootDefinition object");
                                 addPool = false;

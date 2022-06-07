@@ -3,8 +3,8 @@ package com.github.levoment.chestlootmodifier.mixins;
 import com.github.levoment.chestlootmodifier.ChestLootModifierMod;
 import com.github.levoment.chestlootmodifier.ConfigManager;
 import com.github.levoment.chestlootmodifier.RarityObject;
-import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
-import net.fabricmc.fabric.api.loot.v1.FabricLootSupplierBuilder;
+import net.fabricmc.fabric.api.loot.v2.FabricLootPoolBuilder;
+import net.fabricmc.fabric.api.loot.v2.FabricLootTableBuilder;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -79,7 +79,7 @@ public class LootableContainerBlockEntityMixin {
                             List<String> lootList = ConfigManager.CURRENT_CONFIG.LootDefinitions.get(key);
                             // Check if the list is not empty
                             if (lootList.size() > 0) {
-                                LootPool currentLootPool = FabricLootPoolBuilder.builder().build();
+                                LootPool currentLootPool = LootPool.builder().build();
                                 // Go through all the loot definitions for this chest in the config file
                                 for (String itemID : lootList) {
 
@@ -114,9 +114,9 @@ public class LootableContainerBlockEntityMixin {
                                                         try {
                                                             int itemWeight = Integer.parseInt(secondMatch);
                                                             // Create the pool builder
-                                                            currentLootPool = FabricLootPoolBuilder.of(currentLootPool).
-                                                                    withEntry(ItemEntry.builder(currentItem).weight(itemWeight).build())
-                                                                    .withFunction(SetCountLootFunction.builder(ConstantLootNumberProvider.create(itemCount)).build())
+                                                            currentLootPool = FabricLootPoolBuilder.copyOf(currentLootPool).
+                                                                    with(ItemEntry.builder(currentItem).weight(itemWeight).build())
+                                                                    .apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(itemCount)).build())
                                                                     .rolls(UniformLootNumberProvider.create(rarityMinRolls, rarityMaxRolls))
                                                                     .build();
                                                         } catch (NumberFormatException numberFormatException) {
@@ -138,7 +138,7 @@ public class LootableContainerBlockEntityMixin {
                                 // Add the item to the pool of items for the current chest
                                 LootManager lootManager = minecraftServer.getLootManager();
                                 LootTable lootTable = lootManager.getTable(this.lootTableId);
-                                this.chestLootModifierModModifiedLootTable = FabricLootSupplierBuilder.of(lootTable).withPool(currentLootPool).build();
+                                this.chestLootModifierModModifiedLootTable = FabricLootTableBuilder.copyOf(lootTable).pool(currentLootPool).build();
                                 this.addPool = true;
                             } else {
                                 ChestLootModifierMod.LOGGER.error("[Chest Loot Modifier Mod] There is no loot defined for " + key + " in the config file LootDefinition object");
